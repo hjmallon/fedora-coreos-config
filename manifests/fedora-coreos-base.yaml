@@ -79,9 +79,6 @@ packages:
   - e2fsprogs xfsprogs
   - mdadm
   - docker
-  - docker-latest
-  - docker-lvm-plugin
-  - docker-novolume-plugin
   - selinux-policy-targeted
   - sssd
   - cloud-init
@@ -92,9 +89,6 @@ packages:
   - iscsi-initiator-utils
   - bridge-utils
   - nfs-utils
-  - subscription-manager
-  - subscription-manager-plugin-ostree
-  - subscription-manager-plugin-container
   - openssh-server openssh-clients
   - chrony
   - logrotate
@@ -103,7 +97,6 @@ packages:
   - NetworkManager vim-minimal nano
   - sudo
   - tuned tuned-profiles-atomic
-  - bubblewrap
   - fuse
   - irqbalance
   - bash-completion
@@ -117,7 +110,6 @@ packages:
   - cockpit-docker
   - cockpit-ostree
   - setools-console
-  - device-mapper-multipath
   - sg3_utils
   - attr
   - firewalld
