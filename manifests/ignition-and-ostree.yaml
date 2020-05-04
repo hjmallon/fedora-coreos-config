@@ -20,7 +20,7 @@ tmp-is-dir: true
 machineid-compat: false
 
 packages:
-  - ignition
+  # - ignition
   - dracut-network
 
 remove-from-packages:

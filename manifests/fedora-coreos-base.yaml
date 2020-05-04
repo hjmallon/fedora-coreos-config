@@ -65,65 +65,66 @@ remove-files:
   - usr/share/doc
 
 
-# ⚠⚠⚠ ONLY TEMPORARY HACKS ALLOWED HERE; ALL ENTRIES NEED TRACKER LINKS ⚠⚠⚠
-# See also the version of this in fedora-coreos.yaml
-postprocess:
-  # This will be dropped once rpm-ostree because module-aware.
-  # https://github.com/projectatomic/rpm-ostree/issues/1542#issuecomment-419684977
-  # https://github.com/projectatomic/rpm-ostree/issues/1435
-  - |
-    #!/usr/bin/env bash
-    set -xeuo pipefail
-    for x in /etc/yum.repos.d/*modular.repo; do
-      sed -i -e 's,enabled=[01],enabled=0,' ${x}
-    done
-  # Disable the default-enabled AuthorizedKeysFile directive so we can
-  # override it in a config fragment
-  # https://github.com/coreos/fedora-coreos-tracker/issues/139
-  # https://bugzilla.redhat.com/1824913
-  - |
-    #!/usr/bin/env bash
-    set -xeuo pipefail
-    sed -i 's/^AuthorizedKeysFile[[:blank:]]/#&/' /etc/ssh/sshd_config
-    . /etc/os-release
-    if [ "${VERSION_ID}" = 31 ]; then
-      # Fedora 31 doesn't read the config fragment, so we need to do this
-      # here.
-      echo -e '\n# Read authorized_keys fragments written by Ignition and Afterburn\nAuthorizedKeysFile .ssh/authorized_keys .ssh/authorized_keys.d/ignition .ssh/authorized_keys.d/afterburn' >> /etc/ssh/sshd_config
-    fi
+# # ⚠⚠⚠ ONLY TEMPORARY HACKS ALLOWED HERE; ALL ENTRIES NEED TRACKER LINKS ⚠⚠⚠
+# # See also the version of this in fedora-coreos.yaml
+# postprocess:
+#   # This will be dropped once rpm-ostree because module-aware.
+#   # https://github.com/projectatomic/rpm-ostree/issues/1542#issuecomment-419684977
+#   # https://github.com/projectatomic/rpm-ostree/issues/1435
+#   - |
+#     #!/usr/bin/env bash
+#     set -xeuo pipefail
+#     for x in /etc/yum.repos.d/*modular.repo; do
+#       sed -i -e 's,enabled=[01],enabled=0,' ${x}
+#     done
+#   # Disable the default-enabled AuthorizedKeysFile directive so we can
+#   # override it in a config fragment
+#   # https://github.com/coreos/fedora-coreos-tracker/issues/139
+#   # https://bugzilla.redhat.com/1824913
+#   - |
+#     #!/usr/bin/env bash
+#     set -xeuo pipefail
+#     sed -i 's/^AuthorizedKeysFile[[:blank:]]/#&/' /etc/ssh/sshd_config
+#     . /etc/os-release
+#     if [ "${VERSION_ID}" = 31 ]; then
+#       # Fedora 31 doesn't read the config fragment, so we need to do this
+#       # here.
+#       echo -e '\n# Read authorized_keys fragments written by Ignition and Afterburn\nAuthorizedKeysFile .ssh/authorized_keys .ssh/authorized_keys.d/ignition .ssh/authorized_keys.d/afterburn' >> /etc/ssh/sshd_config
+#     fi
 
-  # Enable SELinux booleans used by OpenShift
-  # https://github.com/coreos/fedora-coreos-tracker/issues/284
-  - |
-    #!/usr/bin/env bash
-    set -xeuo pipefail
-    setsebool -P -N container_use_cephfs on  # RHBZ#1692369
-    setsebool -P -N virt_use_samba on  # RHBZ#1754825
+#   # Enable SELinux booleans used by OpenShift
+#   # https://github.com/coreos/fedora-coreos-tracker/issues/284
+#   - |
+#     #!/usr/bin/env bash
+#     set -xeuo pipefail
+#     setsebool -P -N container_use_cephfs on  # RHBZ#1692369
+#     setsebool -P -N virt_use_samba on  # RHBZ#1754825
 
 packages:
   # Security
   - selinux-policy-targeted
   - polkit
   # System setup
-  - afterburn
-  - afterburn-dracut
+  # - afterburn
+  # - afterburn-dracut
   - passwd
   # SSH
   - openssh-server openssh-clients
   # Containers
-  - podman skopeo runc systemd-container
+  - podman skopeo runc
   - fuse-overlayfs slirp4netns
   # Remote IPC for podman
-  - libvarlink-util
+  # - libvarlink-util
   # Networking
-  - nfs-utils-coreos
+  # - nfs-utils-coreos
   - NetworkManager hostname
-  - iproute-tc
+  # - iproute-tc
   - adcli
   ## Teaming https://github.com/coreos/fedora-coreos-config/pull/289 and http://bugzilla.redhat.com/1758162
   - NetworkManager-team teamd
   # Static firewalling
-  - iptables nftables iptables-nft iptables-services
+  - iptables nftables iptables-services
+  # - iptables-nft
   # Interactive Networking configuration during coreos-install
   - NetworkManager-tui
   # Storage
@@ -135,7 +136,7 @@ packages:
   - cifs-utils
   # Time sync
   - chrony
-  # Allow communication between sudo and SSSD 
+  # Allow communication between sudo and SSSD
   # for caching sudo rules by SSSD.
   # https://github.com/coreos/fedora-coreos-tracker/issues/445
   - libsss_sudo
@@ -158,16 +159,16 @@ packages:
   # so we can't put it in file-transfer.yaml
   - fuse-sshfs
   # User experience
-  - console-login-helper-messages-issuegen
-  - console-login-helper-messages-motdgen
-  - console-login-helper-messages-profile
-  - toolbox
+  # - console-login-helper-messages-issuegen
+  # - console-login-helper-messages-motdgen
+  # - console-login-helper-messages-profile
+  # - toolbox
   # CoreOS Installer
-  - coreos-installer coreos-installer-systemd
+  # - coreos-installer coreos-installer-systemd
   # i18n
   - kbd
   # Parsing/Interacting with JSON data
-  - jq
+  # - jq
 
 # This thing is crying out to be pulled into systemd, but that hasn't happened
 # yet.  Also we may want to add to rpm-ostree something like arch negation;
