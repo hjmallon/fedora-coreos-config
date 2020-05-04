@@ -12,6 +12,7 @@ rojig:
 
 repos:
   - CentOS-Base
+  - CentOS-extras
   - CentOS-updates
   - rhel-atomic-rebuild
 
