@@ -1,7 +1,9 @@
 ref: centos/${basearch}/coreos/testing-devel
-include: manifests/bootable-rpm-ostree.yaml
+include: manifests/fedora-coreos-base.yaml
 
 releasever: "7"
+automatic-version-prefix: "${releasever}.<date:%Y%m%d>.dev"
+mutate-os-release: "${releasever}"
 
 rojig:
   license: MIT
